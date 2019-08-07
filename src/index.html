@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+</body>
+<div>
+    <form>
+        <fieldset>
+            <legend>Cadastro</legend>
+            <label>Cep:</label>
+            <input type="text" id="cep" name="cep" />
+            <label>Logradouro:</label>
+            <input type="text" id="logradouro" name="logradouro" />
+            <label>Bairro:</label>
+            <input type="text" id="bairro" name="bairro" />
+            <label>Localidade</label>
+            <input type="text" id="localidade" name="localidade" />
+        </fieldset>
+
+    </form>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+<script>
+    (function() {
+        buscaCepPromise(40325464)
+        buscaCepAwait(40325464)
+
+    })
+
+
+    //Promisse
+    function buscaCepPromise(cep) {
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(function(response) {
+                return response.json()
+            })
+            .then(function(json) {
+                console.log(json)
+            });
+    };
+
+    //Async Await
+    async function buscaCepAwait(cep) {
+        let response = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        let data = await response.json()
+        return data
+    }
+
+    $('#cep').on('change', function() {
+        var cep = $("#cep").val()
+
+        buscaCepAwait(cep).then(async data => {
+            $("#logradouro").val(data.logradouro)
+            $("#bairro").val(data.bairro)
+            $("#localidade").val(data.localidade)
+            $("#localidade").val(data.uf)
+        })
+    })
+</script>
+
+</html>
